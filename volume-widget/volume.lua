@@ -38,9 +38,9 @@ local popup = awful.popup{
     bg = beautiful.bg_normal,
     ontop = true,
     visible = false,
-    shape = gears.shape.rounded_rect,
+    shape = gears.shape.rect,
     border_width = 1,
-    border_color = beautiful.bg_focus,
+    border_color = beautiful.border_focus,
     maximum_width = 400,
     offset = { y = 5 },
     widget = {}
@@ -57,14 +57,18 @@ end
 local function build_rows(devices, on_checkbox_click, device_type)
     local device_rows  = { layout = wibox.layout.fixed.vertical }
     for _, device in pairs(devices) do
+        
+        if (device.properties.device_class == 'monitor') then
+            goto skip_to_next
+        end
 
         local checkbox = wibox.widget {
             checked = device.is_default,
             color = beautiful.bg_normal,
             paddings = 2,
             shape = gears.shape.circle,
-            forced_width = 20,
-            forced_height = 20,
+            forced_width = 17,
+            forced_height = 17,
             check_color = beautiful.fg_urgent,
             widget = wibox.widget.checkbox
         }
@@ -102,20 +106,21 @@ local function build_rows(devices, on_checkbox_click, device_type)
             widget = wibox.container.background
         }
 
-        row:connect_signal("mouse::enter", function(c) c:set_bg(beautiful.bg_focus) end)
-        row:connect_signal("mouse::leave", function(c) c:set_bg(beautiful.bg_normal) end)
-
         local old_cursor, old_wibox
-        row:connect_signal("mouse::enter", function()
+        row:connect_signal("mouse::enter", function(c)
             local wb = mouse.current_wibox
             old_cursor, old_wibox = wb.cursor, wb
-            wb.cursor = "hand1"
+            wb.cursor = "hand2"
+            c:set_bg(beautiful.bg_focus)
+            c:set_fg(beautiful.fg_focus)
         end)
-        row:connect_signal("mouse::leave", function()
+        row:connect_signal("mouse::leave", function(c)
             if old_wibox then
                 old_wibox.cursor = old_cursor
                 old_wibox = nil
             end
+            c:set_bg(beautiful.bg_normal) 
+            c:set_fg(beautiful.fg_normal)
         end)
 
         row:connect_signal("button::press", function()
@@ -125,6 +130,8 @@ local function build_rows(devices, on_checkbox_click, device_type)
         end)
 
         table.insert(device_rows, row)
+
+        ::skip_to_next::
     end
 
     return device_rows
@@ -149,9 +156,9 @@ local function rebuild_popup()
 
         for i = 0, #rows do rows[i]=nil end
 
-        table.insert(rows, build_header_row("SINKS"))
+        table.insert(rows, build_header_row("Воспроизведение"))
         table.insert(rows, build_rows(sinks, function() rebuild_popup() end, "sink"))
-        table.insert(rows, build_header_row("SOURCES"))
+        table.insert(rows, build_header_row("Микрофоны"))
         table.insert(rows, build_rows(sources, function() rebuild_popup() end, "source"))
 
         popup:setup(rows)

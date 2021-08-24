@@ -78,6 +78,16 @@ local function worker(user_args)
             weekday_fg = beautiful.fg,
             header_fg = beautiful.fg,
             border = beautiful.border_normal
+        },
+        beautiful = {
+            bg = beautiful.bg_normal,
+            fg = beautiful.fg_normal,
+            focus_date_bg = beautiful.fg_urgent,
+            focus_date_fg = beautiful.fg_normal,
+            weekend_day_bg = beautiful.tasklist_bg_focus,
+            weekday_fg = beautiful.bg_normal,
+            header_fg = beautiful.fg_normal,
+            border = beautiful.border_focus
         }
 
     }
