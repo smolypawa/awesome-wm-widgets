@@ -85,7 +85,7 @@ local function worker(user_args)
             focus_date_bg = beautiful.fg_urgent,
             focus_date_fg = beautiful.fg_normal,
             weekend_day_bg = beautiful.tasklist_bg_focus,
-            weekday_fg = beautiful.bg_normal,
+            weekday_fg = beautiful.fg_normal,
             header_fg = beautiful.fg_normal,
             border = beautiful.border_focus
         }
