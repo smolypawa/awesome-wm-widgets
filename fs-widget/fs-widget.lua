@@ -17,7 +17,7 @@ config.mounts = { '/' }
 config.refresh_rate = 60
 
 -- wibar widget
-config.widget_width = 40
+config.widget_width = 60
 config.widget_bar_color = '#aaaaaa'
 config.widget_onclick_bg = '#ff0000'
 config.widget_border_color = '#535d6c66'
@@ -50,7 +50,7 @@ local function worker(user_args)
             forced_height = 20,
             forced_width = _config.widget_width,
             paddings = 2,
-            margins = 4,
+            margins = 8,
             border_width = 1,
             border_radius = 2,
             border_color = _config.widget_border_color,
@@ -74,28 +74,33 @@ local function worker(user_args)
 
     local disk_header = wibox.widget {
         {
-            markup = '<b>Mount</b>',
-            forced_width = 150,
+            markup = '<b>Точка монтирования</b>',            
             align = 'left',
             widget = wibox.widget.textbox,
         },
         {
-            markup = '<b>Used</b>',
-            align = 'left',
+            markup = '<b>Заполнено</b>',
+            align = 'right',
+            widget = wibox.widget.textbox,
+        },
+        {
+            markup = '<b>Доступно</b>',
+            align = 'right',
             widget = wibox.widget.textbox,
         },
         layout = wibox.layout.ratio.horizontal
     }
+    
     disk_header:ajust_ratio(1, 0, 0.3, 0.7)
 
     local popup = awful.popup {
         bg = _config.popup_bg,
         ontop = true,
         visible = false,
-        shape = gears.shape.rounded_rect,
+        shape = gears.shape.rect,
         border_width = _config.popup_border_width,
         border_color = _config.popup_border_color,
-        maximum_width = 400,
+        maximum_width = 1000,
         offset = { y = 5 },
         widget = {}
     }
@@ -139,7 +144,7 @@ local function worker(user_args)
                     local row = wibox.widget {
                         {
                             text = disks[v].mount,
-                            forced_width = 150,
+                            -- forced_width = 350,
                             widget = wibox.widget.textbox
                         },
                         {
@@ -148,24 +153,34 @@ local function worker(user_args)
                             value = tonumber(disks[v].perc),
                             forced_height = 20,
                             paddings = 1,
-                            margins = 4,
+                            margins = 3,
                             border_width = 1,
                             border_color = _config.popup_bar_border_color,
                             background_color = _config.popup_bar_background_color,
-                            bar_border_width = 1,
+                            bar_border_width = 0,
                             bar_border_color = _config.popup_bar_border_color,
+                            
                             widget = wibox.widget.progressbar,
                         },
                         {
-                            text = math.floor(disks[v].used / 1024 / 1024)
-                                    .. '/'
-                                    .. math.floor(disks[v].size / 1024 / 1024) .. 'GB('
-                                    .. math.floor(disks[v].perc) .. '%)',
+                            markup = '<b>'
+                                    .. math.floor(disks[v].avail / 1024 / 1024)
+                                    .. '</b>'                                    
+                                    .. '<span foreground="'                                    
+                                    .. _config.popup_border_color
+                                    .. '">'
+                                    .. ' из '
+                                    .. math.floor(disks[v].size / 1024 / 1024)
+                                    .. ' Гб'
+                                    .. '</span>',
+
+                                    -- .. math.floor(disks[v].perc) .. '%)',
+                            align = 'right',
                             widget = wibox.widget.textbox
                         },
                         layout = wibox.layout.ratio.horizontal
                     }
-                    row:ajust_ratio(2, 0.3, 0.3, 0.4)
+                    -- row:ajust_ratio(20, 20, 0.3, 0.4)
 
                     disk_rows[k] = row
                 end
@@ -175,7 +190,7 @@ local function worker(user_args)
                         disk_rows,
                         layout = wibox.layout.fixed.vertical,
                     },
-                    margins = 8,
+                    margins = 6,
                     widget = wibox.container.margin
                 }
             end,

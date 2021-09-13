@@ -238,7 +238,7 @@ local function worker(user_args)
             if placement == 'top' then
                 awful.placement.top(popup, { margins = { top = 30 }, parent = awful.screen.focused() })
             elseif placement == 'top_right' then
-                awful.placement.top_right(popup, { margins = { top = 30, right = 10}, parent = awful.screen.focused() })
+                awful.placement.top_right(popup, { margins = { top = 33, right = 10}, parent = awful.screen.focused() })
             elseif placement == 'bottom_right' then
                 awful.placement.bottom_right(popup, { margins = { bottom = 30, right = 10},
                     parent = awful.screen.focused() })
