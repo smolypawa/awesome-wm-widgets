@@ -28,7 +28,7 @@ function widget.get_widget(widgets_args)
         },
         layout = wibox.layout.fixed.horizontal,
         set_volume_level = function(self, new_value)
-            self:get_children_by_id('txt')[1]:set_text(new_value)
+            self:get_children_by_id('txt')[1]:set_markup_silently('<span color="#feb903">' .. new_value .. '</span>')
             local volume_icon_name
             if self.is_muted then
                 volume_icon_name = 'audio-volume-muted-symbolic'
