@@ -87,7 +87,8 @@ local function worker(user_args)
             weekend_day_bg = beautiful.tasklist_bg_focus,
             weekday_fg = beautiful.fg_normal,
             header_fg = beautiful.fg_normal,
-            border = beautiful.border_focus
+            border = beautiful.border_normal,
+            border_width = beautiful.border_width
         }
 
     }
@@ -178,7 +179,7 @@ local function worker(user_args)
                 widget = wibox.container.margin
             },
             shape = props.shape,
-            shape_border_color = props.border_color or '#000000',
+            shape_border_color = props.border or '#000000',
             shape_border_width = props.border_width or 0,
             fg = props.fg_color or calendar_themes[theme].fg,
             bg = props.bg_color or default_bg,
@@ -201,7 +202,7 @@ local function worker(user_args)
         visible = false,
         shape = rounded_shape(radius),
         offset = { y = 5 },
-        border_width = 1,
+        border_width = calendar_themes[theme].border_width or 1,
         border_color = calendar_themes[theme].border,
         widget = cal
     }
